@@ -168,3 +168,40 @@ function nextQuestion() {
     alert('답변을 선택해주세요.');
   }
 }
+
+// 프론트엔드에서 서버로 답변을 전송하는 부분
+function sendAnswers() {
+  const answers = userAnswers; // 사용자의 답변 데이터
+
+  fetch('/api/answers', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(answers)
+  })
+      .then(response => {
+        if (response.ok) {
+          console.log('Answers sent successfully');
+          getGameRecommendations();
+        } else {
+          console.error('Failed to send answers');
+        }
+      })
+      .catch(error => {
+        console.error('Error:', error);
+      });
+}
+
+// 프론트엔드에서 추천 게임을 서버로부터 받아오는 부분
+function getGameRecommendations() {
+  fetch('/api/recommendation')
+      .then(response => response.json())
+      .then(data => {
+        console.log('Recommended Games:', data);
+        // 프론트엔드에서 추천 게임을 사용자에게 보여주는 로직 추가
+      })
+      .catch(error => {
+        console.error('Error:', error);
+      });
+}
