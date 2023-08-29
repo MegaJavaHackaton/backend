@@ -4,7 +4,7 @@ import com.example.gigajava.game.GameDTO;
 
 import java.util.List;
 
-public class GroupDTO {
+public class MbtiGroupDTO {
     private int groupId;
     private String groupName;
     private List<GameDTO> games;

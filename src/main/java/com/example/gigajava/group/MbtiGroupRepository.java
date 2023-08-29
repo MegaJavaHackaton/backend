@@ -3,10 +3,8 @@ package com.example.gigajava.group;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import java.util.List;
-
 @Repository
-public interface GroupRepository extends JpaRepository<Group, Integer> {
+public interface MbtiGroupRepository extends JpaRepository<MbtiGroup, Integer> {
 
 }
 

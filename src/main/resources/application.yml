@@ -2,9 +2,9 @@
 spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/mydb
+    url: jdbc:mysql://localhost:3306/megajava
     username: root
-    password: lhj7057
+    password: 1234
 
   # JPA config
   jpa:

@@ -1,6 +1,7 @@
 package com.example.gigajava.game;
 
-import com.example.gigajava.group.Group;
+import com.example.gigajava.group.MbtiGroup;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -21,8 +22,19 @@ public class Game {
     private String gameName;
 
     @ManyToOne
-    @JoinColumn(name = "group_group_id", referencedColumnName = "group_id")
-    private Group group;
+    @JsonIgnore
+    @JoinColumn(name = "group_id", referencedColumnName = "group_id")
+    private MbtiGroup mbtiGroup;
+
+
+    public Game() {
+    }
+
+    public Game(int gameId, String gameName, MbtiGroup mbtiGroup) {
+        this.gameId = gameId;
+        this.gameName = gameName;
+        this.mbtiGroup = mbtiGroup;
+    }
 
     public int getGameId() {
         return gameId;
@@ -40,12 +52,12 @@ public class Game {
         this.gameName = gameName;
     }
 
-    public Group getGroup() {
-        return group;
+    public MbtiGroup getMbtiGroup() {
+        return mbtiGroup;
     }
 
-    public void setGroup(Group group) {
-        this.group = group;
+    public void setMbtiGroup(MbtiGroup mbtiGroup) {
+        this.mbtiGroup = mbtiGroup;
     }
 }
 
