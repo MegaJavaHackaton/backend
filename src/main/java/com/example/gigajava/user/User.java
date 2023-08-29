@@ -1,6 +1,6 @@
 package com.example.gigajava.user;
 
-import com.example.gigajava.group.Group;
+import com.example.gigajava.group.MbtiGroup;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -19,7 +19,7 @@ public class User {
 
     @ManyToOne
     @JoinColumn(name = "group_id")
-    private Group group;
+    private MbtiGroup group;
 
     public User() {
 
@@ -33,7 +33,7 @@ public class User {
                 '}';
     }
 
-    public User(int userId, Group group) {
+    public User(int userId, MbtiGroup group) {
         this.userId = userId;
         this.group = group;
     }
@@ -46,11 +46,11 @@ public class User {
         this.userId = userId;
     }
 
-    public Group getGroup() {
+    public MbtiGroup getGroup() {
         return group;
     }
 
-    public void setGroup(Group group) {
+    public void setGroup(MbtiGroup group) {
         this.group = group;
     }
 }

@@ -2,30 +2,28 @@ package com.example.gigajava.group;
 
 import com.example.gigajava.game.GameDTO;
 import com.example.gigajava.game.GameService;
-import com.example.gigajava.recommend.GameRecommendationDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
-public class GroupService {
+public class MbtiGroupService {
 
     @Autowired
-    private GroupRepository groupRepository;
+    private MbtiGroupRepository mbtigroupRepository;
 
     @Autowired
     private GameService gameService;
 
-    public List<GroupDTO> getAllGroups() {
-        List<Group> groups = groupRepository.findAll();
+    public List<MbtiGroupDTO> getAllGroups() {
+        List<MbtiGroup> groups = mbtigroupRepository.findAll();
 
         // Convert Group entities to GroupDTOs
-        List<GroupDTO> groupDTOs = new ArrayList<>();
-        for (Group group : groups) {
-            GroupDTO groupDTO = new GroupDTO();
+        List<MbtiGroupDTO> groupDTOs = new ArrayList<>();
+        for (MbtiGroup group : groups) {
+            MbtiGroupDTO groupDTO = new MbtiGroupDTO();
             groupDTO.setGroupId(group.getGroupId());
             groupDTO.setGroupName(group.getGroupName());
 
