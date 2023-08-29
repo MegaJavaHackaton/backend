@@ -1,5 +1,6 @@
 const startButton = document.getElementById('start-button');
 const explanation = document.getElementById('explanation');
+const progressBar = document.querySelector('.range')
 const surveyForm = document.getElementById('survey-form');
 const questionContainer = document.getElementById('question-container');
 const resultPage = document.getElementById('result');
@@ -124,6 +125,7 @@ function getQuestionById(id) {
 function startSurvey() {
   startButton.style.display = 'none';
   explanation.style.display = 'none';
+  progressBar.style.display = 'block';
   surveyForm.style.display = 'block';
 
   // 메인 페이지에서 첫 번째 질문 보여주기
@@ -132,6 +134,8 @@ function startSurvey() {
 
 function renderQuestion(questionIndex) {
   const question = questions[questionIndex];
+  const percentage = (questionIndex) / questions.length * 100;
+
   questionContainer.innerHTML = `
     <div class="question">
       <p id="quest">${question.text}</p>
@@ -139,6 +143,9 @@ function renderQuestion(questionIndex) {
       <button id="next" type="button" onclick="nextQuestion()">다음</button>
     </div>
   `;
+
+  progressBar.style.setProperty('--p', `${percentage}%`);
+  progressBar.querySelector('.range__label').textContent = `${Math.round(percentage)}%`;
 
   const answerInputs = document.querySelectorAll('input[name="answer"]');
   answerInputs.forEach(input => {
@@ -161,8 +168,12 @@ function nextQuestion() {
       renderQuestion(currentQuestionIndex);
     } else {
       questionContainer.style.display = 'none';
+      progressBar.style.setProperty('--p', "100%");
+      progressBar.querySelector('.range__label').textContent = "100%";
       console.log("사용자의 답변:");
       console.log(userAnswers);
+
+      animateProgressBarOut();
     }
   } else {
     alert('답변을 선택해주세요.');
@@ -204,4 +215,16 @@ function getGameRecommendations() {
       .catch(error => {
         console.error('Error:', error);
       });
+}
+
+// 애니메이션 처리
+function animateProgressBarOut() {
+  const progressBarAnimationDuration = 2000;
+  const progressBar = document.querySelector('.range');
+  progressBar.style.animation = `fadeOut ${progressBarAnimationDuration}ms`;
+
+  setTimeout(() => {
+    progressBar.style.display = 'none';
+    progressBar.style.animation = '';
+  }, progressBarAnimationDuration);
 }
