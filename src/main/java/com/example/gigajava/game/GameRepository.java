@@ -12,6 +12,7 @@ import java.util.List;
 public interface GameRepository extends JpaRepository<Game, Integer> {
     @Query("SELECT g FROM Game g INNER JOIN g.group gr WHERE gr = :group")
     List<Game> findRecommendedGamesByGroup(Group group);
+
+    // mbti 값을 기반으로 게임을 찾는 메서드
+    Game findByGroupGroupName(String mbti);
 }
-
-

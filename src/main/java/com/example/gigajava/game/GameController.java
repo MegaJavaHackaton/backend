@@ -32,10 +32,10 @@ public class GameController {
         return ResponseEntity.ok("Answers received successfully");
     }
 
-    @GetMapping("/recommendation")
-    public ResponseEntity<Map<String, String>> getGameRecommendations() {
-        return ResponseEntity.ok(gameRecommendations);
-    }
+//    @GetMapping("/recommendation")
+//    public ResponseEntity<Map<String, String>> getGameRecommendations() {
+//        return ResponseEntity.ok(gameRecommendations);
+//    }
 
     private String getRecommendedGame(String questionId, String userAnswer) {
         // 각 질문에 따라 추천 게임 반환
