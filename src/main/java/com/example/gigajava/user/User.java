@@ -33,21 +33,12 @@ public class User {
                 '}';
     }
 
-    public User(int userId, Group group) {
-        this.userId = userId;
-        this.group = group;
-    }
-
     public int getUserId() {
         return userId;
     }
 
     public void setUserId(int userId) {
         this.userId = userId;
-    }
-
-    public Group getGroup() {
-        return group;
     }
 
     public void setGroup(Group group) {
