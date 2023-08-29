@@ -12,9 +12,9 @@ import java.util.Map;
 @RestController
 @RequestMapping("/api")
 public class GameController {
-
+    @Autowired
+    private GameService gameService;
     private final Map<String, String> gameRecommendations = new HashMap<>();
-
     @PostMapping("/answers")
     public ResponseEntity<String> receiveAnswers(@RequestBody List<AnswerDTO> answers) {
         // 각 답변을 분석하여 추천된 게임을 저장
@@ -42,15 +42,5 @@ public class GameController {
         // 실제 비즈니스 로직에 맞게 구현
         return "Recommended Game for " + questionId + ": " + userAnswer;
     }
-
-    @Autowired
-    private GameService gameService;
-
-    @GetMapping
-    public List<GameDTO> getAllGames() {
-        return gameService.getAllGames();
-    }
-
-    // Other controller methods
 }
 

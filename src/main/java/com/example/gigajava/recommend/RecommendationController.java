@@ -1,5 +1,7 @@
 package com.example.gigajava.recommend;
 
+import com.example.gigajava.game.Game;
+import com.example.gigajava.game.GameService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -8,31 +10,47 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api")
 public class RecommendationController {
 
     private final GameRecommendationService gameRecommendationService;
+    private final GameService gameService;
 
     @Autowired
-    public RecommendationController(GameRecommendationService gameRecommendationService) {
+    public RecommendationController(GameRecommendationService gameRecommendationService, GameService gameService) {
         this.gameRecommendationService = gameRecommendationService;
+        this.gameService = gameService;
     }
 
     @GetMapping("/recommendation")
-    public ResponseEntity<Map<String, String>> getRecommendation(@RequestParam Map<String, String> userAnswers) {
+    public ResponseEntity<Map<String, List<String>>> getRecommendation(@RequestParam Map<String, String> userAnswers) {
         // 사용자 답변을 기반으로 MBTI를 추출합니다.
+        Map<String, List<String>> recommendationMap = new HashMap<>();
         String mbti = determineMBTI(userAnswers);
+        List<String> recommendedGameNames = gameService.recommendGamesForMBTI(mbti);
 
-        // MBTI에 따른 게임 추천을 받아옵니다.
-        String recommendedGame = gameRecommendationService.recommendGameForMBTI(mbti);
+        recommendationMap.put(mbti, recommendedGameNames);
 
-        // 결과를 맵으로 포장하여 반환합니다.
-        Map<String, String> recommendationMap = Map.of(mbti, recommendedGame);
         return ResponseEntity.ok(recommendationMap);
     }
+
+//    @GetMapping("/recommendation")
+//    public ResponseEntity<Map<String, String>> getRecommendation(@RequestParam Map<String, String> userAnswers) {
+//        // 사용자 답변을 기반으로 MBTI를 추출합니다.
+//        String mbti = determineMBTI(userAnswers);
+//
+//        // MBTI에 따른 게임 추천을 받아옵니다.
+//        String recommendedGame = gameRecommendationService.recommendGameForMBTI(mbti);
+//
+//        // 결과를 맵으로 포장하여 반환합니다.
+//        Map<String, String> recommendationMap = Map.of(mbti, recommendedGame);
+//        return ResponseEntity.ok(recommendationMap);
+//    }
 
     private String determineMBTI(Map<String, String> userAnswers) {
         int eCount = 0, iCount = 0, sCount = 0, nCount = 0, tCount = 0, fCount = 0, jCount = 0, pCount = 0;

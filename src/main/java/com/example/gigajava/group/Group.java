@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Table(name = "group")
+@Table(name = "groups")
 @Getter
 @Setter
 public class Group {
@@ -23,49 +23,8 @@ public class Group {
     @Column(name = "group_name")
     private String groupName;
 
-    @OneToMany(mappedBy = "group", cascade = CascadeType.ALL)
-    private List<Game> games = new ArrayList<>();
-
-    public Group(int groupId, String groupName, List<Game> games) {
-        this.groupId = groupId;
-        this.groupName = groupName;
-        this.games = games;
-    }
-
     public Group() {
 
     }
 
-    public int getGroupId() {
-        return groupId;
-    }
-
-    public void setGroupId(int groupId) {
-        this.groupId = groupId;
-    }
-
-    public String getGroupName() {
-        return groupName;
-    }
-
-    public void setGroupName(String groupName) {
-        this.groupName = groupName;
-    }
-
-    public List<Game> getGames() {
-        return games;
-    }
-
-    public void setGames(List<Game> games) {
-        this.games = games;
-    }
-
-    @Override
-    public String toString() {
-        return "Group{" +
-                "groupId=" + groupId +
-                ", groupName='" + groupName + '\'' +
-                ", games=" + games +
-                '}';
-    }
 }
