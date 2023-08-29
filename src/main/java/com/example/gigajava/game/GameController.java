@@ -26,6 +26,7 @@ public class GameController {
     private UserRepository userRepository;
     @Autowired
     private GameRecommendationService gameRecommendationService;
+
     @Autowired
     public GameController(GameRecommendationService gameRecommendationService, GameService gameService) {
         this.gameRecommendationService = gameRecommendationService;
@@ -38,12 +39,13 @@ public class GameController {
         for (AnswerDTO answer : answers) {
             String questionId = answer.getQuestionId();
             String userAnswer = answer.getAnswer();
+            int userId = answer.getUserId();
 
             // 각 질문에 따라서 사용자의 선택을 MBTI로 변환 (가상의 변환 예시)
             String mbti = convertAnswerToMBTI(userAnswer);
 
             // 사용자의 MBTI를 User 엔티티에 저장
-            saveMBTIForUser(answer.getUserId(), mbti);
+            saveMBTIForUser(userId, mbti);
 
             // MBTI를 기반으로 게임을 추천받고 결과를 출력 (가상의 예시)
             List<String> recommendedGames = gameService.recommendGamesForMBTI(mbti);
@@ -66,9 +68,49 @@ public class GameController {
 
     // 가상의 예시: 사용자의 선택을 MBTI로 변환하는 로직
     private String convertAnswerToMBTI(String userAnswer) {
-        // 이 부분을 실제로 사용자의 선택을 MBTI로 변환하는 로직으로 수정
-        // 예: "A" -> "ISTJ", "B" -> "ENFP" 등
-        return "ISTJ"; // 가상의 MBTI로 변환
+        int eCount = 0, iCount = 0, sCount = 0, nCount = 0, tCount = 0, fCount = 0, jCount = 0, pCount = 0;
+
+        for (int i = 1; i <= 12; i++) {
+            String questionId = "q" + i;
+            String answer = userAnswer;
+
+            if (answer != null) {
+                switch (questionId) {
+                    case "q1":
+                    case "q6":
+                    case "q8":
+                        eCount += answer.equals("E") ? 1 : 0;
+                        iCount += answer.equals("I") ? 1 : 0;
+                        break;
+                    case "q2":
+                    case "q3":
+                    case "q7":
+                        sCount += answer.equals("S") ? 1 : 0;
+                        nCount += answer.equals("N") ? 1 : 0;
+                        break;
+                    case "q4":
+                    case "q10":
+                    case "q11":
+                        tCount += answer.equals("T") ? 1 : 0;
+                        fCount += answer.equals("F") ? 1 : 0;
+                        break;
+                    case "q5":
+                    case "q9":
+                    case "q12":
+                        jCount += answer.equals("J") ? 1 : 0;
+                        pCount += answer.equals("P") ? 1 : 0;
+                        break;
+                }
+            }
+        }
+
+        String mbti = "";
+        mbti += eCount > iCount ? "E" : "I";
+        mbti += sCount > nCount ? "S" : "N";
+        mbti += tCount > fCount ? "T" : "F";
+        mbti += jCount > pCount ? "J" : "P";
+
+        return mbti;
     }
 
 
