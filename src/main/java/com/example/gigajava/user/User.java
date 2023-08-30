@@ -39,5 +39,8 @@ public class User {
 
     public void setGroup(MyGroup group) {
     }
+
+    public void setMyGroup(MyGroup group) {
+    }
 }
 
