@@ -45,8 +45,38 @@ public class GameController {
                 .map(Game::getGameName)
                 .collect(Collectors.toList());
 
+        saveUserMBTI(userId, mbti);
         return ResponseEntity.ok("Answers received successfully");
     }
+
+    private void saveUserMBTI(int userId, String mbti) {
+        Optional<User> userOptional = userRepository.findById(userId);
+        if (userOptional.isPresent()) {
+            User user = userOptional.get();
+            MyGroup group = groupRepository.findByGroupName(mbti);
+
+            if (group != null) {
+                user.setGroup(group);
+                userRepository.save(user);
+            } else {
+                // 그룹을 찾지 못한 경우 처리
+                String defaultGroupName = "DEFAULT"; // 기본 그룹 이름 설정
+                MyGroup defaultGroup = groupRepository.findByGroupName(defaultGroupName);
+
+                if (defaultGroup != null) {
+                    user.setGroup(defaultGroup);
+                    userRepository.save(user);
+                    System.out.println("No matching group found for MBTI: " + mbti + ". Assigned to default group: " + defaultGroupName);
+                } else {
+                    System.out.println("No matching group found for MBTI: " + mbti + " and no default group available.");
+                }
+            }
+        } else {
+            // 사용자를 찾지 못한 경우 처리
+            System.out.println("User not found for userId: " + userId);
+        }
+    }
+
 
     private String calculateAndSaveMBTI(int userId, List<AnswerDTO> answers) {
         // MBTI 계산 로직 구현

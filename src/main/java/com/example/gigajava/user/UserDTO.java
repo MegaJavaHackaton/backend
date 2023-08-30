@@ -2,7 +2,7 @@ package com.example.gigajava.user;
 
 public class UserDTO {
     private int userId;
-    private int groupId;
+    private int myGroupGroupId;
 
     public int getUserId() {
         return userId;
@@ -12,11 +12,11 @@ public class UserDTO {
         this.userId = userId;
     }
 
-    public int getGroupId() {
-        return groupId;
+    public int getMyGroupGroupId() {
+        return myGroupGroupId;
     }
 
-    public void setGroupId(int groupId) {
-        this.groupId = groupId;
+    public void setMyGroupGroupId(int myGroupGroupId) {
+        this.myGroupGroupId = myGroupGroupId;
     }
 }

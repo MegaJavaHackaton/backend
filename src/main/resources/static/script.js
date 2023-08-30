@@ -135,7 +135,7 @@ function startSurvey() {
 function renderQuestion(questionIndex) {
   const question = questions[questionIndex];
   const percentage = (questionIndex) / questions.length * 100;
-
+  
   questionContainer.innerHTML = `
     <div class="question">
       <p id="quest">${question.text}</p>
@@ -143,7 +143,7 @@ function renderQuestion(questionIndex) {
       <button id="next" type="button" onclick="nextQuestion()">다음</button>
     </div>
   `;
-
+  
   progressBar.style.setProperty('--p', `${percentage}%`);
   progressBar.querySelector('.range__label').textContent = `${Math.round(percentage)}%`;
 
@@ -161,70 +161,41 @@ function nextQuestion() {
   if (selectedAnswer) {
     const questionId = currentQuestion.id;
     const answer = selectedAnswer.value;
+
     saveAnswer(questionId, answer);
 
     currentQuestionIndex++;
-    if (currentQuestionIndex < questions.length) {      
+    if (currentQuestionIndex < questions.length) { 
+      
       renderQuestion(currentQuestionIndex);
     } else {
       questionContainer.style.display = 'none';
       progressBar.style.setProperty('--p', "100%");
-      progressBar.querySelector('.range__label').textContent = "100%";
+      progressBar.querySelector('.range__label').textContent = "100%";  
       console.log("사용자의 답변:");
       console.log(userAnswers);
-
-      animateProgressBarOut();
+      
+      animateProgressBarOut(() => {
+        progressBar.style.display = 'none';
+      });
     }
   } else {
     alert('답변을 선택해주세요.');
   }
 }
 
-// 프론트엔드에서 서버로 답변을 전송하는 부분
-function sendAnswers() {
-  const answers = userAnswers; // 사용자의 답변 데이터
-
-  fetch('/api/answers', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify(answers)
-  })
-      .then(response => {
-        if (response.ok) {
-          console.log('Answers sent successfully');
-          getGameRecommendations();
-        } else {
-          console.error('Failed to send answers');
-        }
-      })
-      .catch(error => {
-        console.error('Error:', error);
-      });
-}
-
-// 프론트엔드에서 추천 게임을 서버로부터 받아오는 부분
-function getGameRecommendations() {
-  fetch('/api/recommendation')
-      .then(response => response.json())
-      .then(data => {
-        console.log('Recommended Games:', data);
-        // 프론트엔드에서 추천 게임을 사용자에게 보여주는 로직 추가
-      })
-      .catch(error => {
-        console.error('Error:', error);
-      });
-}
-
-// 애니메이션 처리
 function animateProgressBarOut() {
   const progressBarAnimationDuration = 2000;
   const progressBar = document.querySelector('.range');
   progressBar.style.animation = `fadeOut ${progressBarAnimationDuration}ms`;
 
   setTimeout(() => {
-    progressBar.style.display = 'none';
     progressBar.style.animation = '';
+    goToResultPage();
   }, progressBarAnimationDuration);
 }
+
+function goToResultPage() {
+  window.location.href = 'result.html'
+}
+
