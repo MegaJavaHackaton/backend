@@ -49,7 +49,20 @@ public class GameController {
                 .map(Game::getGameName)
                 .collect(Collectors.toList());
 
+        updateUserMBTI(userId, mbti);
+
         return ResponseEntity.ok("Answers received successfully");
+    }
+
+    private void updateUserMBTI(int userId, String mbti) {
+        User user = userRepository.findById(userId).orElse(null);
+        if (user != null) {
+            Group group = groupRepository.findByGroupName(mbti);
+            if (group != null) {
+                user.setGroup(group);
+                userRepository.save(user);
+            }
+        }
     }
 
     private String calculateAndSaveMBTI(int userId, List<AnswerDTO> answers) {
