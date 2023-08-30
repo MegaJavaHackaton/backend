@@ -1,13 +1,13 @@
 package com.example.gigajava.game;
 
-import com.example.gigajava.group.Group;
+import com.example.gigajava.group.MyGroup;
 import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
 
 @Entity
-@Table(name = "games")
+@Table(name = "game")
 @Getter
 @Setter
 public class Game {
@@ -21,8 +21,8 @@ public class Game {
     private String gameName;
 
     @ManyToOne
-    @JoinColumn(name = "group_group_id", referencedColumnName = "group_id")
-    private Group group;
+    @JoinColumn(name = "my_group_group_id", referencedColumnName = "group_id")
+    private MyGroup group;
 
     public int getGameId() {
         return gameId;
@@ -40,11 +40,11 @@ public class Game {
         this.gameName = gameName;
     }
 
-    public Group getGroup() {
+    public MyGroup getGroup() {
         return group;
     }
 
-    public void setGroup(Group group) {
+    public void setGroup(MyGroup group) {
         this.group = group;
     }
 }

@@ -1,6 +1,6 @@
 package com.example.gigajava.user;
 
-import com.example.gigajava.group.Group;
+import com.example.gigajava.group.MyGroup;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -18,8 +18,8 @@ public class User {
     private int userId;
 
     @ManyToOne
-    @JoinColumn(name = "group_id")
-    private Group group;
+    @JoinColumn(name = "my_group_group_id", referencedColumnName = "group_id")
+    private MyGroup group;
 
     public User() {
 
@@ -33,20 +33,11 @@ public class User {
                 '}';
     }
 
-    public int getUserId() {
-        return userId;
-    }
-
-    public void setUserId(int userId) {
-        this.userId = userId;
-    }
-
-    public void setGroup(Group group) {
-        this.group = group;
-    }
-
     public User orElse(Object o) {
         return null;
+    }
+
+    public void setGroup(MyGroup group) {
     }
 }
 

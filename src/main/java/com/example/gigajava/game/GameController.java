@@ -1,7 +1,7 @@
 package com.example.gigajava.game;
 
-import com.example.gigajava.group.Group;
 import com.example.gigajava.group.GroupRepository;
+import com.example.gigajava.group.MyGroup;
 import com.example.gigajava.recommend.AnswerDTO;
 import com.example.gigajava.recommend.AnswerRequest;
 import com.example.gigajava.recommend.GameRecommendationService;
@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @RestController
@@ -21,20 +22,14 @@ import java.util.stream.Collectors;
 public class GameController {
     @Autowired
     private GameService gameService;
-    private final Map<String, String> gameRecommendations = new HashMap<>();
     @Autowired
     private GroupRepository groupRepository;
     @Autowired
     private UserRepository userRepository;
     @Autowired
     private GameRecommendationService gameRecommendationService;
-    private GameRepository gameRepository;
-
     @Autowired
-    public GameController(GameRecommendationService gameRecommendationService, GameService gameService) {
-        this.gameRecommendationService = gameRecommendationService;
-        this.gameService = gameService;
-    }
+    private GameRepository gameRepository;
 
     @PostMapping("/answers")
     public ResponseEntity<String> receiveAnswers(@RequestBody AnswerRequest answerRequest) {
@@ -53,17 +48,6 @@ public class GameController {
         return ResponseEntity.ok("Answers received successfully");
     }
 
-    private void updateUserMBTI(int userId, String mbti) {
-        User user = userRepository.findById(userId).orElse(null);
-        if (user != null) {
-            Group group = groupRepository.findByGroupName(mbti);
-            if (group != null) {
-                user.setGroup(group);
-                userRepository.save(user);
-            }
-        }
-    }
-
     private String calculateAndSaveMBTI(int userId, List<AnswerDTO> answers) {
         // MBTI 계산 로직 구현
 
@@ -71,33 +55,33 @@ public class GameController {
 
         for (int i = 1; i <= 12; i++) {
             String questionId = "q" + i;
-            List<AnswerDTO> answer = answers;
+            AnswerDTO answer = answers.get(i - 1);  // 인덱스는 0부터 시작하므로 (i - 1)을 사용
 
             if (answer != null) {
                 switch (questionId) {
                     case "q1":
                     case "q6":
                     case "q8":
-                        eCount += answer.equals("E") ? 1 : 0;
-                        iCount += answer.equals("I") ? 1 : 0;
+                        eCount += answer.getAnswer().equals("E") ? 1 : 0;
+                        iCount += answer.getAnswer().equals("I") ? 1 : 0;
                         break;
                     case "q2":
                     case "q3":
                     case "q7":
-                        sCount += answer.equals("S") ? 1 : 0;
-                        nCount += answer.equals("N") ? 1 : 0;
+                        sCount += answer.getAnswer().equals("S") ? 1 : 0;
+                        nCount += answer.getAnswer().equals("N") ? 1 : 0;
                         break;
                     case "q4":
                     case "q10":
                     case "q11":
-                        tCount += answer.equals("T") ? 1 : 0;
-                        fCount += answer.equals("F") ? 1 : 0;
+                        tCount += answer.getAnswer().equals("T") ? 1 : 0;
+                        fCount += answer.getAnswer().equals("F") ? 1 : 0;
                         break;
                     case "q5":
                     case "q9":
                     case "q12":
-                        jCount += answer.equals("J") ? 1 : 0;
-                        pCount += answer.equals("P") ? 1 : 0;
+                        jCount += answer.getAnswer().equals("J") ? 1 : 0;
+                        pCount += answer.getAnswer().equals("P") ? 1 : 0;
                         break;
                 }
             }
@@ -110,17 +94,40 @@ public class GameController {
         mbti += jCount > pCount ? "J" : "P";
 
         // 사용자의 MBTI를 업데이트
-        User user = userRepository.findById(userId).orElse(null);
-        if (user != null) {
-            Group group = groupRepository.findByGroupName(mbti);
+        Optional<User> userOptional = userRepository.findById(userId);
+        if (userOptional.isPresent()) {
+            User user = userOptional.get();
+            // 이후 로직 계속 진행
+            MyGroup group = groupRepository.findByGroupName(mbti);
+
             if (group != null) {
                 user.setGroup(group);
                 userRepository.save(user);
+            } else {
+                // 해당 MBTI에 맞는 그룹을 찾지 못한 경우 처리
+                // 예: 로그를 출력하거나 기본 그룹을 할당하는 등의 처리
+                String defaultGroupName = "DEFAULT"; // 기본 그룹 이름 설정
+                MyGroup defaultGroup = groupRepository.findByGroupName(defaultGroupName);
+
+                if (defaultGroup != null) {
+                    user.setGroup(defaultGroup);
+                    userRepository.save(user);
+                    System.out.println("No matching group found for MBTI: " + mbti + ". Assigned to default group: " + defaultGroupName);
+                } else {
+                    System.out.println("No matching group found for MBTI: " + mbti + " and no default group available.");
+                }
             }
+        } else {
+            // 해당 userId에 맞는 사용자를 찾지 못한 경우 처리
+            // 예: 로그를 출력하거나 에러 메시지를 리턴하는 등의 처리
+            System.out.println("User not found for userId: " + userId);
         }
 
+
+// 계산된 MBTI 반환
         return mbti;
     }
+
 
 //    @PostMapping("/answers")
 //    public ResponseEntity<String> receiveAnswers(@RequestBody List<AnswerDTO> answers) {

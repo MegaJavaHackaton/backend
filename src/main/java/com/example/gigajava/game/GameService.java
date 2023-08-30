@@ -1,6 +1,5 @@
 package com.example.gigajava.game;
 
-import com.example.gigajava.group.Group;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

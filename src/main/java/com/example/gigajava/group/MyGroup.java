@@ -1,19 +1,15 @@
 package com.example.gigajava.group;
 
-import com.example.gigajava.game.Game;
 import lombok.Getter;
 import lombok.Setter;
-import org.apache.catalina.User;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.List;
 
 @Entity
-@Table(name = "groups")
+@Table(name = "my_group")
 @Getter
 @Setter
-public class Group {
+public class MyGroup {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -23,7 +19,7 @@ public class Group {
     @Column(name = "group_name")
     private String groupName;
 
-    public Group() {
+    public MyGroup() {
 
     }
 

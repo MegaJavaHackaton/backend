@@ -1,14 +1,11 @@
 package com.example.gigajava.group;
 
-import com.example.gigajava.game.Game;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import java.util.List;
-
 @Repository
-public interface GroupRepository extends JpaRepository<Group, Integer> {
+public interface GroupRepository extends JpaRepository<MyGroup, Integer> {
 
-    Group findByGroupName(String mbti);
+    MyGroup findByGroupName(String mbti);
 }
 
