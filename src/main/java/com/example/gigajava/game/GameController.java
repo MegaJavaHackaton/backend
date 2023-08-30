@@ -3,6 +3,7 @@ package com.example.gigajava.game;
 import com.example.gigajava.group.Group;
 import com.example.gigajava.group.GroupRepository;
 import com.example.gigajava.recommend.AnswerDTO;
+import com.example.gigajava.recommend.AnswerRequest;
 import com.example.gigajava.recommend.GameRecommendationService;
 import com.example.gigajava.user.User;
 import com.example.gigajava.user.UserRepository;
@@ -48,8 +49,6 @@ public class GameController {
         List<String> recommendedGameNames = recommendedGames.stream()
                 .map(Game::getGameName)
                 .collect(Collectors.toList());
-
-        updateUserMBTI(userId, mbti);
 
         return ResponseEntity.ok("Answers received successfully");
     }
@@ -208,27 +207,6 @@ public class GameController {
         // 각 질문에 따라 추천 게임 반환
         // 실제 비즈니스 로직에 맞게 구현
         return "Recommended Game for " + questionId + ": " + userAnswer;
-    }
-
-    private class AnswerRequest {
-        private int userId;
-        private List<AnswerDTO> answers;
-
-        public int getUserId() {
-            return userId;
-        }
-
-        public void setUserId(int userId) {
-            this.userId = userId;
-        }
-
-        public List<AnswerDTO> getAnswers() {
-            return answers;
-        }
-
-        public void setAnswers(List<AnswerDTO> answers) {
-            this.answers = answers;
-        }
     }
 }
 
