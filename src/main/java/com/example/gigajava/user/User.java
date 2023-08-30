@@ -44,5 +44,9 @@ public class User {
     public void setGroup(Group group) {
         this.group = group;
     }
+
+    public User orElse(Object o) {
+        return null;
+    }
 }
 
